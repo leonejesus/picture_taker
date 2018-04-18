@@ -14,12 +14,16 @@
         </rosparam>
     </node>
     <!-- Start tilt joint controller -->
-    <rosparam file="$(find my_dynamixel_controller)config/multi_turn.yaml" command="load"/>
+    <rosparam file="$(find picture_taker)config/multi_turn.yaml" command="load"/>
     <node name="tilt_controller_spawner" pkg="dynamixel_controllers" type="controller_spawner.py"
           args="--manager=dxl_manager
                 --port pan_tilt_port
                 tilt_controller"
           output="screen"/> 
    <param name="Qtd_Pos" value="16" type="int"/> 
-   <node pkg="dynamixel_position_control" type="motor_controller" name="motor_controller" output="screen"/>
+   <node pkg="picture_taker" type="motor_controller" name="motor_controller" output="screen"/>
+   <param name="cam_device" value="0" type="int"/>  
+   <param name="image_show" value="0" type="int"/>  
+   <node pkg="picture_taker" name="cam_publisher" type="cam_publisher"/>
+   <node pkg="picture_taker" name="picture_server" type="picture_server"/>
 </launch>

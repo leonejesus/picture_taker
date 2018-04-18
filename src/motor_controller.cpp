@@ -5,7 +5,7 @@
 
 #include "dynamixel_position_control/MsgDynamixel.h"
 #include "dynamixel_msgs/JointState.h"
-#include "picture_server/image_cmd.h"
+#include "picture_taker/image_cmd.h"
 #include <sstream>
 
 #define GOAL_POS 0
@@ -17,7 +17,7 @@
 #define TX 0
 #define RX 1
 
-void motor_command(ros::Publisher dynamixel_publisher, picture_server::image_cmd service, ros::ServiceClient service_client); //Receive the current motor position and send the next position
+void motor_command(ros::Publisher dynamixel_publisher, picture_taker::image_cmd service, ros::ServiceClient service_client); //Receive the current motor position and send the next position
 bool motor_init(float qtd_pos); //Initialize motor variables
 
 struct Motor{
@@ -75,11 +75,11 @@ int main(int argc, char **argv)
   // message file from the 'dynamixel_control_position' package. The topic name is
   // 'tilt_controller/state' and the size of the subscribe queue is set to 100.
   ros::Subscriber dynamixel_subscriber = nh.subscribe("tilt_controller/state", 100, msgCallback);
-  ros::ServiceClient service_client = nh.serviceClient<picture_server::image_cmd>("image_cmd");
+  ros::ServiceClient service_client = nh.serviceClient<picture_taker::image_cmd>("image_cmd");
 
-  picture_server::image_cmd service;
-  service.cmd = true;
-  service.path = "/home/leone/catkin_ws/pictures_taken_by_robot/";
+  picture_taker::image_cmd service;
+  service.request.cmd = true;
+  service.request.path = "/home/everton/robot/";
   
   ros::Rate loop_rate(5); // Set the loop period (Hz)
   
@@ -98,7 +98,7 @@ int main(int argc, char **argv)
 }
 
 //Receive the current motor position and send the next position
-void motor_command(ros::Publisher dynamixel_publisher, picture_server::image_cmd service, ros::ServiceClient service_client)
+void motor_command(ros::Publisher dynamixel_publisher, picture_taker::image_cmd service, ros::ServiceClient service_client)
 {
   switch(MX28.Estado)
   {
